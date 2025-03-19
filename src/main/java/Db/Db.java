@@ -43,11 +43,11 @@ public class Db {
         }
     }
 
-    private static void closeStatement(Statement st){
-        if(st != null){
-            try{
+    public static void closeStatement(Statement st){
+        if (st!= null) {
+            try {
                 st.close();
-            }catch(SQLException e){
+            } catch (SQLException e) {
                 throw new DbException(e.getMessage());
             }
         }
