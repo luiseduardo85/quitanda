@@ -20,7 +20,6 @@ public class FrutasDaoJDBC implements FrutasDao {
     @Override
     public void insert(Frutas obj) {
         PreparedStatement st = null;
-
         try{
             st = conn.prepareStatement("INSERT INTO frutas "
                     +"(Nome, PrecoUnitario, UnidadeMedida) "
