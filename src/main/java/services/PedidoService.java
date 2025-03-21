@@ -35,11 +35,27 @@ public class PedidoService {
         }
     }
 
-    public void inserirPedido(Frutas frutas) {
+    public void inserirPedido() {
+
+        System.out.print("Qual a fruta do pedido: ");
+        String nome = sc.nextLine();
+
+        System.out.print("Preço unitario: ");
+        Double precoUnitario = sc.nextDouble();
+
+        System.out.print("unidade de medida: ");
+        String unidadeMedida = sc.nextLine();
+
+        Frutas frutas = new Frutas(null, nome, precoUnitario, unidadeMedida);
+
+        System.out.print("Vamos iniciar o cadastro do pedido abaixo: ");
+        sc.nextLine();
         System.out.print("Valor Total: ");
         double valorTotal = sc.nextDouble();
+
         System.out.print("Quantidade: ");
         sc.nextLine();
+
         Double quantidade = sc.nextDouble();
 
         Pedidos novoPedido = new Pedidos(null, frutas, valorTotal, quantidade);

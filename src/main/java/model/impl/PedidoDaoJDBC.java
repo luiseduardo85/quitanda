@@ -166,7 +166,7 @@ public class PedidoDaoJDBC implements PedidoDao {
         try{
             st = conn.prepareStatement("SELECT pedido.*, frutas.nome as FrutasNome "
                     + "From pedido INNER JOIN frutas "
-                    + "ON pedidos.FrutatId = frutas.id "
+                    + "ON pedido.FrutaId = frutas.id "
                     + "ORDER BY NAME");
 
             rs = st.executeQuery();
