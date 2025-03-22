@@ -1,6 +1,8 @@
 package services;
 
 
+import model.dao.DaoFactory;
+import model.dao.FrutasDao;
 import model.dao.PedidoDao;
 import model.entities.Frutas;
 import model.entities.Pedidos;
@@ -36,32 +38,38 @@ public class PedidoService {
     }
 
     public void inserirPedido() {
-
-        System.out.print("Qual a fruta do pedido: ");
-        String nome = sc.nextLine();
-
-        System.out.print("Preço unitario: ");
-        Double precoUnitario = sc.nextDouble();
-
-        System.out.print("unidade de medida: ");
-        String unidadeMedida = sc.nextLine();
-
-        Frutas frutas = new Frutas(null, nome, precoUnitario, unidadeMedida);
-
-        System.out.print("Vamos iniciar o cadastro do pedido abaixo: ");
+        System.out.print("Qual a fruta do pedido (ID): ");
+        int id = sc.nextInt();
         sc.nextLine();
-        System.out.print("Valor Total: ");
-        double valorTotal = sc.nextDouble();
+
+        FrutasDao frutasDao = DaoFactory.createFrutasDao();
+        Frutas fruta = frutasDao.findById(id);
+
+        if (fruta == null) {
+            System.out.println("Fruta não encontrada com o ID informado.");
+            return;
+        }
+
+        System.out.println("Vamos iniciar o cadastro do pedido abaixo:");
 
         System.out.print("Quantidade: ");
+        Double quantidade = sc.nextDouble();
         sc.nextLine();
 
-        Double quantidade = sc.nextDouble();
+        if (quantidade <= 0) {
+            System.out.println("Quantidade inválida. Deve ser maior que zero.");
+            return;
+        }
 
-        Pedidos novoPedido = new Pedidos(null, frutas, valorTotal, quantidade);
+        double valorTotal = quantidade * fruta.getPrecoUnitario();
+        System.out.println("Valor Total: " + valorTotal);
+
+        Pedidos novoPedido = new Pedidos(null, fruta, valorTotal, quantidade);
         pedidoDao.insert(novoPedido);
-        System.out.println("Pedido adicionada com sucesso! ID: " + novoPedido.getId());
+
+        System.out.println("Pedido adicionado com sucesso! ID: " + novoPedido.getId());
     }
+
 
 //    public void atualizarPedido() {
 //        System.out.print("Digite o ID do pedido que deseja atualizar: ");
