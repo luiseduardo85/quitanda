@@ -71,32 +71,40 @@ public class PedidoService {
     }
 
 
-//    public void atualizarPedido() {
-//        System.out.print("Digite o ID do pedido que deseja atualizar: ");
-//        int id = sc.nextInt();
-//        Pedidos pedidos = pedidoDao.findById(id);
-//
-//        if (pedidos == null) {
-//            System.out.println("Pedido não encontrada!");
-//            return;
-//        }
-//
-//        System.out.print("Novo Fruta (" + pedidos.getFruta().getId() + "): ");
-//        sc.nextLine();
-//        Frutas fruta = sc.nextInt();
-//        System.out.print("Novo valor total (" + pedidos.getValorTotal() + "): ");
-//        double valorTotal = sc.nextDouble();
-//        System.out.print("Nova quantidade (" + pedidos.getQuantidade() + "): ");
-//        sc.nextLine();
-//        double quantidade = sc.nextDouble();
-//
-//        pedidos.setFruta(fruta);
-//        fruta.setPrecoUnitario(preco);
-//        fruta.setUnidadeMedida(unidade);
-//
-//        frutasDao.update(fruta);
-//        System.out.println("Fruta atualizada com sucesso!");
-//    }
+    public void atualizarPedido() {
+        System.out.print("Digite o ID do pedido que deseja atualizar: ");
+        int id = sc.nextInt();
+        Pedidos pedidos = pedidoDao.findById(id);
+
+        if (pedidos == null) {
+            System.out.println("Pedido não encontrado!");
+            return;
+        }
+
+        System.out.println("Vamos atualizar o pedido abaixo:");
+        System.out.println("Digite o id da fruta do pedido");
+        int idFruta = sc.nextInt();
+        FrutasDao frutasDao = DaoFactory.createFrutasDao();
+        Frutas fruta = frutasDao.findById(idFruta);
+
+        if (fruta == null) {
+            System.out.println("Fruta não encontrada com o ID informado.");
+            return;
+        }
+
+        System.out.print("Nova quantidade: ");
+        double novaQuantidade = sc.nextDouble();
+        if (novaQuantidade <= 0) {
+            System.out.println("Quantidade inválida. Deve ser maior que zero.");
+            return;
+        }
+        double novoValorTotal = novaQuantidade * fruta.getPrecoUnitario();
+        System.out.println("Novo Valor Total: " + novoValorTotal);
+        pedidos.setFruta(fruta);
+        pedidos.setValorTotal(novoValorTotal);
+        pedidoDao.update(pedidos);
+        System.out.println("Pedido atualizado com sucesso!");
+    }
 
     public void deletarPedido() {
         System.out.print("Digite o ID do pedido a ser removido: ");

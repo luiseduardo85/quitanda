@@ -82,7 +82,6 @@ public class PedidoDaoJDBC implements PedidoDao {
 
         try{
             st = conn.prepareStatement("DELETE FROM pedido WHERE Id= ?");
-
             st.setInt(1, id);
 
             st.executeUpdate();
@@ -99,9 +98,12 @@ public class PedidoDaoJDBC implements PedidoDao {
         ResultSet rs = null;
 
         try{
-            st = conn.prepareStatement("SELECT * "
-                    +"FROM pedido "
-                    + "WHERE pedido.Id = ?"
+            st = conn.prepareStatement("SELECT pedido.*, frutas.Nome as FrutasNome," +
+                    " frutas.PrecoUnitario as PrecoUnitario, frutas.UnidadeMedida as UnidadeMedida "
+                    + "From pedido INNER JOIN frutas "
+                    + "ON pedido.frutaId = frutas.id "
+                    + "WHERE pedido.id = ? "
+                    + "ORDER BY pedido.FrutaId"
             );
 
             st.setInt(1, id);
@@ -127,11 +129,11 @@ public class PedidoDaoJDBC implements PedidoDao {
         ResultSet rs = null;
 
         try{
-            st = conn.prepareStatement("SELECT pedido.*, frutas.nome as FrutaNome "
+            st = conn.prepareStatement("SELECT pedido.*, frutas.Nome as FrutasNome "
                     + "From pedido INNER JOIN frutas "
                     + "ON pedido.frutaId = frutas.id "
                     + "WHERE pedido.id = ? "
-                    + "ORDER BY NAME");
+                    + "ORDER BY frutas.Nome");
 
             st.setInt(1, frutas.getId());
             rs = st.executeQuery();
@@ -144,7 +146,7 @@ public class PedidoDaoJDBC implements PedidoDao {
                 Frutas fruta = map.get(rs.getInt("FrutasId"));
                 if(fruta == null){
                     fruta = instantiateFrutas(rs);
-                    map.put(rs.getInt("DepartmentId"), fruta);
+                    map.put(rs.getInt("FrutasId"), fruta);
                 }
                 Pedidos obj = instantiatePedido(rs, fruta);
                 list.add(obj);
@@ -164,10 +166,10 @@ public class PedidoDaoJDBC implements PedidoDao {
         ResultSet rs = null;
 
         try{
-            st = conn.prepareStatement("SELECT pedido.*, frutas.nome as FrutasNome "
+            st = conn.prepareStatement("SELECT pedido.*, frutas.Nome as FrutasNome, frutas.PrecoUnitario, frutas.UnidadeMedida  "
                     + "From pedido INNER JOIN frutas "
                     + "ON pedido.FrutaId = frutas.id "
-                    + "ORDER BY NOME");
+                    + "ORDER BY frutas.Nome");
 
             rs = st.executeQuery();
 
@@ -176,7 +178,8 @@ public class PedidoDaoJDBC implements PedidoDao {
 
             while (rs.next()){
 
-                Frutas frutas = map.get(rs.getInt("Id"));
+                Frutas frutas = map.get(rs.getInt("FrutaId"));
+
                 if(frutas == null){
                     frutas = instantiateFrutas(rs);
                     map.put(rs.getInt("Id"), frutas);
@@ -205,7 +208,7 @@ public class PedidoDaoJDBC implements PedidoDao {
     private Frutas instantiateFrutas(ResultSet rs) throws SQLException{
         Frutas obj = new Frutas();
         obj.setId(rs.getInt("Id"));
-        obj.setName(rs.getString("Nome"));
+        obj.setName(rs.getString("FrutasNome"));
         obj.setPrecoUnitario(rs.getDouble("PrecoUnitario"));
         obj.setUnidadeMedida(rs.getString("UnidadeMedida"));
         return obj;

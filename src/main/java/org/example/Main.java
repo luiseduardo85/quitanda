@@ -32,7 +32,9 @@ public class Main {
             System.out.println("5 - Deletar Fruta");
             System.out.println("6 - Listar Pedidos");
             System.out.println("7 - Inserir novo Pedido");
-            System.out.println("8 - Listar Pedido por id");
+            System.out.println("8 - Listar Pedido por ID");
+            System.out.println("9 - Atualizar Pedido por ID");
+            System.out.println("10 - Excluir Pedido por ID");
             System.out.println("0 - Sair");
 
             opcao = sc.nextInt();
@@ -60,6 +62,12 @@ public class Main {
                     break;
                 case 8:
                     servicePedido.buscarPedidoPorId();
+                    break;
+                case 9:
+                    servicePedido.atualizarPedido();
+                    break;
+                case 10:
+                    servicePedido.deletarPedido();
                     break;
                 case 0:
                     System.out.println("Saindo...");
